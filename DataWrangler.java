@@ -58,34 +58,36 @@ public class DataWrangler {
 
 				// Create book objects with line data
 				int i = 0;
-				for (int count = 0; count < info_types; count++) {
-					// checks for <","> delimiter
-					if (line.charAt(i) == '\"') {
-						i++;
-						while (line.charAt(i) != '\"') {
-							info[count] += line.charAt(i);
+				if (line.length() > 0) {
+					for (int count = 0; count < info_types; count++) {
+						// checks for <","> delimiter
+						if (line.charAt(i) == '\"') {
 							i++;
-							if (i > line.length() - 1) {
-								break;
+							while (line.charAt(i) != '\"') {
+								info[count] += line.charAt(i);
+								i++;
+								if (i > line.length() - 1) {
+									break;
+								}
 							}
-						}
-						i += 2;
-						// Default delimiter is <,>
-					} else {
-						while (line.charAt(i) != ',') {
-							info[count] += line.charAt(i);
+							i += 2;
+							// Default delimiter is <,>
+						} else {
+							while (line.charAt(i) != ',') {
+								info[count] += line.charAt(i);
+								i++;
+								if (i > line.length() - 1) {
+									break;
+								}
+							}
 							i++;
-							if (i > line.length() - 1) {
-								break;
-							}
 						}
-						i++;
 					}
+					// Create book
+					Book newBook = new Book(info[0], info[1], info[2], Integer.parseInt(info[3]), info[4]);
+					// Back-End function, adds Book to hash table
+					table_name.put(newBook.getISBN(), newBook);
 				}
-				// Create book
-				Book newBook = new Book(info[0], info[1], info[2], Integer.parseInt(info[3]), info[4]);
-				// Back-End function, adds Book to hash table
-				table_name.put(newBook.getISBN(), newBook);
 			}
 
 			scan.close();
